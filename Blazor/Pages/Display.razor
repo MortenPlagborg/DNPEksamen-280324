@@ -1,9 +1,9 @@
 @page "/Display"
 @using Blazor.Models;
 @using Blazor.Data
-
 @inject IChildData ChildData
 @inject IToyData ToyData
+
 <h3>Display</h3>
 <p>
     Filter children: <input type="number" @oninput="@((arg) => Filter(arg))" style="width:50px"/>
@@ -11,64 +11,67 @@
 
 @if (childrenToShow == null)
 {
-        <p>
-                <em> Loading... </em>
-        </p>
-} else if (!childrenToShow.Any())
+    <p>
+        <em> Loading... </em>
+    </p>
+}
+else if (!childrenToShow.Any())
 {
-        <p>
-                <em>No children exist</em>
-        </p>
+    <p>
+        <em>No children exist</em>
+    </p>
 }
 else
 {
-        <table class="table">
-                <tr>
-                        <th>Id</th>
-                        <th>Name</th>
-                        <th>Age</th>
-                        <th>Gender</th>
-                       
-                </tr>
-                <tbody>
-                @foreach (var item in childrenToShow)
-                {
-                        <tr>
-                                <td>@item.Name</td>
-                                <td>@item.Age</td>
-                                <td>@item.Gender</td>
-                            <td>
-                                        <button @onclick="@(() => RemoveChild(item.Name))">
-                                                <i class="oi oi-trash" style="..."></i>
-                                        </button>
-                                </td>
-                        </tr>
-                }
-                </tbody>
-                
-        </table>
+    <table class="table">
+        <tr>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Gender</th>
+            <th>Action</th>
+        </tr>
+        <tbody>
+        @foreach (var item in childrenToShow)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.Age</td>
+                <td>@item.Gender</td>
+                <td>
+                    <button @onclick="@(() => RemoveChild(item.Name))">
+                        <i class="oi oi-trash" style="..."></i>
+                    </button>
+                </td>
+            </tr>
+        }
+        </tbody>
+
+    </table>
 }
 
 @code {
     private IList<Child> children;
     private IList<Child> allChildren;
     private IList<Child> childrenToShow;
-    
+
     private IList<Toy> toys;
     private IList<Toy> allToys;
     private IList<Toy> toysToShow;
 
     private void Filter(ChangeEventArgs changeEventArgs)
     {
-        int? filterById= null;
+        int? filterById = null;
         try
         {
             filterById = int.Parse(changeEventArgs.Value.ToString());
-        } catch (Exception e) {}
+        }
+        catch (Exception e)
+        {
+        }
         if (filterById != null)
         {
-            childrenToShow = allChildren.Where(t => t.Name == filterById).ToList();
-            //toysToShow = allToys.Where((t => t.Name == filterById.ToString()));
+    //childrenToShow = allChildren.Where(t => t.Name == filterById).ToList();
+    //toysToShow = allToys.Where((t => t.Name == filterById.ToString()));
         }
         else
         {
@@ -80,17 +83,17 @@ else
     protected override async Task OnInitializedAsync()
     {
         allChildren = await ChildData.getChildAsync();
-            childrenToShow = allChildren;
+        childrenToShow = allChildren;
         allToys = await ToyData.getToysAsync();
         toysToShow = allToys;
     }
 
-    private async Task RemoveChild(int Id)
+    private async Task RemoveChild(string name)
     {
-        Child childToRemove = childrenToShow.First(t => t.Id == Id);
-        ChildData.RemoveChildAsync(Id);
+        Child childToRemove = childrenToShow.First(t => t.Name == name);
+        await ChildData.RemoveChildAsync(name);
         allChildren.Remove(childToRemove);
         childrenToShow.Remove(childToRemove);
-        
     }
+
 }

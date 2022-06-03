@@ -8,6 +8,6 @@ namespace Blazor.Data
     {
         Task<IList<Child>> getChildAsync();
         Task AddChildAsync(Child children);
-        Task RemoveChildAsync(int Id);
+        Task RemoveChildAsync(string name);
     }
 }

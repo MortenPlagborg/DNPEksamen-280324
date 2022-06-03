@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -10,7 +11,7 @@ namespace Blazor.Data
 {
     public class ToyApiService : IToyData
     {
-        private string url = "https://localhost:5001";
+        private string url = "https://localhost:5004";
         
         private readonly HttpClient client;
 
@@ -24,14 +25,13 @@ namespace Blazor.Data
             using HttpClient client = new HttpClient();
             HttpResponseMessage responseMessage = await client.GetAsync(url + "/toy");
 
-            string result = await responseMessage.Content.ReadAsStringAsync();
-
-            List<Toy> toy = JsonSerializer.Deserialize<List<Toy>>(result, new JsonSerializerOptions
+            if (responseMessage.IsSuccessStatusCode)
             {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-
-            });
-            return toy;
+                var toys = await responseMessage.Content.ReadFromJsonAsync<List<Toy>>();
+                return toys;
+            }
+            
+            return new List<Toy>();
         }
 
         public async Task AddToyAsync(Toy toys)

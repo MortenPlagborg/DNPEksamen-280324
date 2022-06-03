@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -10,7 +11,7 @@ namespace Blazor.Data
 {
     public class ChildApiService : IChildData
     {
-        private string url = "https://localhost:5001";
+        private string url = "https://localhost:5004";
 
         private readonly HttpClient client;
 
@@ -24,14 +25,9 @@ namespace Blazor.Data
             using HttpClient client = new HttpClient();
             HttpResponseMessage responseMessage = await client.GetAsync(url + "/child");
 
-            string result = await responseMessage.Content.ReadAsStringAsync();
+            var children = await responseMessage.Content.ReadFromJsonAsync<List<Child>>();
 
-            List<Child> child = JsonSerializer.Deserialize<List<Child>>(result, new JsonSerializerOptions
-            {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-
-            });
-            return child;
+            return children;
         }
 
         public async Task AddChildAsync(Child children)
@@ -40,15 +36,15 @@ namespace Blazor.Data
             String ChildAsJSON = JsonSerializer.Serialize(children);
             HttpContent content = new StringContent(ChildAsJSON, Encoding.UTF8, "application/json");
 
-            HttpResponseMessage response = await client.PostAsync("https://localhost:5004/Index", content);
+            HttpResponseMessage response = await client.PostAsync("https://localhost:5004/Child", content);
             if (!response.IsSuccessStatusCode)
                 throw new Exception($"Error: {response.StatusCode}, {response.ReasonPhrase}");
         }
 
-        public async Task RemoveChildAsync(int Id)
+        public async Task RemoveChildAsync(string name)
         {
             using HttpClient client = new HttpClient();
-            HttpResponseMessage response = await client.DeleteAsync($"https://localhost:5004/Child/{Id}");
+            HttpResponseMessage response = await client.DeleteAsync($"https://localhost:5004/Child/{name}");
             if (!response.IsSuccessStatusCode)
                 throw new Exception(@"Error: {response.StatusCode}, {response.ReasonPhrase}");
         }
