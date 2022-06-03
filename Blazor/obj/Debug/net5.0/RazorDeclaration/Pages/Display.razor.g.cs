@@ -110,22 +110,25 @@ using Blazor.Data;
     private IList<Child> children;
     private IList<Child> allChildren;
     private IList<Child> childrenToShow;
-    
+
     private IList<Toy> toys;
     private IList<Toy> allToys;
     private IList<Toy> toysToShow;
 
     private void Filter(ChangeEventArgs changeEventArgs)
     {
-        int? filterById= null;
+        int? filterById = null;
         try
         {
             filterById = int.Parse(changeEventArgs.Value.ToString());
-        } catch (Exception e) {}
+        }
+        catch (Exception e)
+        {
+        }
         if (filterById != null)
         {
-            childrenToShow = allChildren.Where(t => t.Name == filterById).ToList();
-            //toysToShow = allToys.Where((t => t.Name == filterById.ToString()));
+    //childrenToShow = allChildren.Where(t => t.Name == filterById).ToList();
+    //toysToShow = allToys.Where((t => t.Name == filterById.ToString()));
         }
         else
         {
@@ -137,19 +140,19 @@ using Blazor.Data;
     protected override async Task OnInitializedAsync()
     {
         allChildren = await ChildData.getChildAsync();
-            childrenToShow = allChildren;
+        childrenToShow = allChildren;
         allToys = await ToyData.getToysAsync();
         toysToShow = allToys;
     }
 
-    private async Task RemoveChild(int Id)
+    private async Task RemoveChild(string name)
     {
-        Child childToRemove = childrenToShow.First(t => t.Id == Id);
-        ChildData.RemoveChildAsync(Id);
+        Child childToRemove = childrenToShow.First(t => t.Name == name);
+        await ChildData.RemoveChildAsync(name);
         allChildren.Remove(childToRemove);
         childrenToShow.Remove(childToRemove);
-        
     }
+
 
 #line default
 #line hidden
