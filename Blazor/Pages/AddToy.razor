@@ -1,0 +1,42 @@
+@page "/AddToy"
+@using Blazor.Data;
+@using Blazor.Models;
+
+@inject IToyData ToyData
+@inject NavigationManager NavigationManager
+<h3>AddToy</h3>
+
+<EditForm Model="@newToDoItem" OnValidSubmit="@AddNewToy">
+    <DataAnnotationsValidator>
+        <ValidationSummary>
+            <div class="form-group">
+                Name<br/>
+                <InputTextArea data-browse="4" @bind-Value="newToDoItem.Name"/>
+            </div>
+            <div class="form-group">
+                Color<br/>
+                <InputTextArea data-browse="4" @bind-Value="newToDoItem.Color"/>
+            </div>
+            <div class="form-group">
+                Condition<br/>
+                <InputTextArea data-browse="4" @bind-Value="newToDoItem.Condition"/>
+            </div>
+            <div class="form-group">
+                Is Favourite:<br/>
+                <InputCheckbox data-browse="4" @bind-Value="newToDoItem.IsFavourite"/>
+            </div>
+        </ValidationSummary>
+    </DataAnnotationsValidator>
+
+</EditForm>
+@code {
+    private Toy newToDoItem = new Toy();
+
+    private async Task AddNewToy()
+    {
+        await ToyData.AddToyAsync(newToDoItem);
+        NavigationManager.NavigateTo("/Index");
+    }
+    
+    
+}

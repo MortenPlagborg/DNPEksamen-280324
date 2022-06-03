@@ -1,0 +1,42 @@
+@page "/AddChild"
+@using Blazor.Data;
+@using Blazor.Models;
+
+@inject IChildData ChildData
+@inject NavigationManager NavigationManager
+<h3>AddChild</h3>
+
+<EditForm Model="@newToDoItem" OnValidSubmit="@AddNewChild">
+    <DataAnnotationsValidator/>
+    <ValidationSummary/>
+    
+    <div class="form-group">
+        Name:<br/>
+        <InputTextArea data-browse="4" @bind-Value="newToDoItem.Name"/>
+    </div>
+    <div class="form-group">
+        Age:<br/>
+        <InputNumber data-browse="4" @bind-Value="newToDoItem.Age"/>
+    </div>
+    <div class="form-group">
+        Gender:<br/>
+        <InputTextArea data-browse="4" @bind-Value="newToDoItem.Gender"/>
+    </div>
+    
+    <p class="actions">
+        <button class="btn btn-outline-dark" type="submit">Create</button>
+    </p>
+    
+</EditForm>
+
+
+@code {
+    private Child newToDoItem = new Child();
+
+    private async Task AddNewChild()
+    {
+        await ChildData.AddChildAsync(newToDoItem);
+        NavigationManager.NavigateTo("/Index");
+    }
+
+}
