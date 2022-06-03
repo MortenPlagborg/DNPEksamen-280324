@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "tRvVjwCSunQCO+oDq+wfi1qUQUs5aGJWI8WQH2V6VhMUNFoKteiJX097GmnbBn4y67M3pdvtq4KUt7lweT9RLg==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\morte\\OneDrive\\Skrivebord\\DNPEksamen-280324\\Blazor\\Blazor.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\morte\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\5.0.16\\microsoft.netcore.app.host.win-x64.5.0.16.nupkg.sha512"
+  ],
+  "logs": []
+}
