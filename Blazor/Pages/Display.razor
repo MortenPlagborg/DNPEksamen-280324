@@ -60,20 +60,13 @@ else
 
     private void Filter(ChangeEventArgs changeEventArgs)
     {
-        int? filterById = null;
-        try
-        {
-            filterById = int.Parse(changeEventArgs.Value.ToString());
-        }
-        catch (Exception e)
-        {
-        }
-        if (filterById != null)
-        {
-    //childrenToShow = allChildren.Where(t => t.Name == filterById).ToList();
-    //toysToShow = allToys.Where((t => t.Name == filterById.ToString()));
-        }
-        else
+        string filterByName = (string)changeEventArgs.Value;
+        
+        if (!string.IsNullOrWhiteSpace(filterByName)) {
+            childrenToShow = allChildren.Where(a => a.Name.Contains(filterByName, StringComparison.InvariantCultureIgnoreCase)).ToList();
+            toysToShow = allToys.Where(a => a.Name.Contains(filterByName, StringComparison.InvariantCultureIgnoreCase)).ToList();
+        } 
+        else 
         {
             childrenToShow = allChildren;
             toysToShow = allToys;

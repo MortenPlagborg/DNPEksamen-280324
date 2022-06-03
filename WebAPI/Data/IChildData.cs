@@ -8,5 +8,6 @@ namespace WebAPI.Data
     {
         Task<IList<Child>> getChild();
         Task<Child> addChild(Child children);
+        Task removeChild(string name);
     }
 }

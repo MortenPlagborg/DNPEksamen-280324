@@ -51,5 +51,24 @@ namespace WebAPI.Controllers
                 return StatusCode(500, e.Message);
             }
         }
-    }
+
+        [HttpDelete]
+        public async Task<ActionResult<Child>> removeChild([FromBody] string? name)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                await childService.removeChild(name);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return StatusCode(500, e.Message);
+            }
+        }
+     }
 }

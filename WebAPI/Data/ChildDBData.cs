@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -26,6 +27,16 @@ namespace WebAPI.Data
             EntityEntry<Child> newChild = await ctx.Children.AddAsync(children);
             await ctx.SaveChangesAsync();
             return newChild.Entity;
+        }
+
+        public async Task removeChild(string name)
+        {
+            Child removeChild = await ctx.Children.FirstOrDefaultAsync(t => t.Name == name);
+            if (removeChild != null)
+            {
+                ctx.Children.Remove(removeChild);
+                await ctx.SaveChangesAsync();
+            }
         }
     }
 }
